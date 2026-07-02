@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/types.ts"],
+  "sourcesContent": ["export interface VectorStore {\n  id: string;\n  name: string;\n  file_count?: number;\n  status?: string;\n}\n\nexport interface ChatMessage {\n  role: 'user' | 'assistant' | 'system';\n  content: string;\n}\n\nexport interface ChatStreamRequest {\n  model: string;\n  messages: ChatMessage[];\n  vector_store_id?: string;\n  top_k?: number;\n  user_key: string;\n}\n\nexport interface ChatCompletionsRequest extends ChatStreamRequest {\n  stream?: false;\n}\n\nexport interface SearchResult {\n  filename: string;\n  score: number;\n  text: string;\n}\n\nexport interface ChatStreamChunk {\n  delta?: string;\n  error?: string;\n  search_results?: SearchResult[];\n}\n\nexport interface ChatResult {\n  content: string;\n  citations: Array<{ filename: string; score: number; snippet: string }>;\n}\n\nexport interface LiteLLMChatConfig {\n  baseUrl: string;\n  defaultModel?: string;\n  defaultVectorStoreId?: string;\n  maxRequestBudget?: number;\n}"],
+  "mappings": ";;;;;;;;;;;;;;;;AAAA;AAAA;",
+  "names": []
+}

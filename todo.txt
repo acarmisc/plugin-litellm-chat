@@ -1,0 +1,96 @@
+(A) 2026-06-30 +phase1-scaffold Create monorepo root package.json @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend package.json @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend tsconfig.json @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend build.js @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend config.d.ts @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend src/index.ts stub @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend src/plugin.ts stub @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend src/router.ts stub @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend src/stream.ts stub @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat-backend src/types.ts stub @backend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat package.json @frontend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat tsconfig.json @frontend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat build.js @frontend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat src/index.ts stub @frontend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat src/plugin.tsx stub @frontend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat src/api.ts stub @frontend
+(A) 2026-06-30 +phase1-scaffold Create packages/plugin-litellm-chat src/types.ts stub @frontend
+(A) 2026-06-30 +phase1-scaffold Create README.md @docs
+(B) 2026-06-30 +phase1-scaffold yarn install inside target Backstage monorepo to link both packages @backend
+(A) 2026-06-30 +phase2-verify-llm Confirm /v1/rag/query endpoint exists on LiteLLM v1.90.0 @research
+(A) 2026-06-30 +phase2-verify-llm Confirm /v1/chat/completions vector_store_ids fallback response shape for citations @research
+(A) 2026-06-30 +phase2-verify-llm Confirm /v1/vector_stores returns list of registered pgvector stores @research
+(B) 2026-06-30 +phase2-verify-llm Verify SSE passthrough through Backstage HttpRouterService default middleware @research
+(B) 2026-06-30 +phase2-verify-llm Check whether compression middleware buffers SSE stream on chat route @research
+(A) 2026-06-30 +phase3-backend-stream Implement proxySSE function in stream.ts @backend
+(A) 2026-06-30 +phase3-backend-stream Set SSE headers Content-Type text/event-stream @backend
+(A) 2026-06-30 +phase3-backend-stream Set Cache-Control no-cache no-transform @backend
+(A) 2026-06-30 +phase3-backend-stream Set X-Accel-Buffering no @backend
+(A) 2026-06-30 +phase3-backend-stream Call res.flushHeaders early @backend
+(A) 2026-06-30 +phase3-backend-stream Pipe upstream ReadableStream through res @backend
+(A) 2026-06-30 +phase3-backend-stream Handle upstream error emit single SSE error event @backend
+(A) 2026-06-30 +phase3-backend-stream Handle client disconnect via req.on close AbortController @backend
+(B) 2026-06-30 +phase3-backend-stream Write unit test for proxySSE with mock fetch @backend
+(A) 2026-06-30 +phase4-backend-router Implement GET /health endpoint @backend
+(A) 2026-06-30 +phase4-backend-router Implement GET /vector_stores endpoint @backend
+(A) 2026-06-30 +phase4-backend-router Import resolveUserId toLiteLLMUserId getOrProvisionUser from govai @backend
+(A) 2026-06-30 +phase4-backend-router Implement POST /chat/stream endpoint @backend
+(A) 2026-06-30 +phase4-backend-router Primary path POST /v1/rag/query with retrieval_config @backend
+(A) 2026-06-30 +phase4-backend-router Fallback to POST /v1/chat/completions with vector_store_ids on 404 @backend
+(A) 2026-06-30 +phase4-backend-router Skip RAG when vector_store_id is null plain chat mode @backend
+(A) 2026-06-30 +phase4-backend-router Use user_key from request body as upstream Authorization Bearer @backend
+(A) 2026-06-30 +phase4-backend-router Implement POST /chat/completions non-streaming variant @backend
+(B) 2026-06-30 +phase4-backend-router Write router tests with injected mock LiteLLMClient @backend
+(A) 2026-06-30 +phase4-backend-router Implement plugin.ts createBackendPlugin litellm-chat @backend
+(A) 2026-06-30 +phase4-backend-router Wire httpRouter.use(router) in init @backend
+(A) 2026-06-30 +phase4-backend-router Export litellmChatPlugin default from index.ts @backend
+(A) 2026-06-30 +phase4-backend-router Define config.d.ts for optional litellm.chat config keys @backend
+(A) 2026-06-30 +phase5-frontend-api Define types VectorStore ChatRequest ChatStreamChunk SearchResult Citation @frontend
+(A) 2026-06-30 +phase5-frontend-api Implement listVectorStores GET /api/litellm-chat/vector_stores @frontend
+(A) 2026-06-30 +phase5-frontend-api Implement chatStream SSE reader via ReadableStream @frontend
+(A) 2026-06-30 +phase5-frontend-api Parse data lines in chatStream @frontend
+(A) 2026-06-30 +phase5-frontend-api Call onToken on each chunk in chatStream @frontend
+(A) 2026-06-30 +phase5-frontend-api Call onDone on DONE sentinel in chatStream @frontend
+(A) 2026-06-30 +phase5-frontend-api Call onError on HTTP or parse failure in chatStream @frontend
+(A) 2026-06-30 +phase5-frontend-api Return AbortController from chatStream for stop generation @frontend
+(A) 2026-06-30 +phase5-frontend-api Implement chatCompletions non-streaming variant @frontend
+(A) 2026-06-30 +phase5-frontend-api Create liteLlmChatApiRef and LiteLlmChatApi class @frontend
+(A) 2026-06-30 +phase6-frontend-hooks Implement useChat hook thread state management @frontend
+(A) 2026-06-30 +phase6-frontend-hooks Implement threads array in useState @frontend
+(A) 2026-06-30 +phase6-frontend-hooks Persist threads to localStorage keyed by userId @frontend
+(A) 2026-06-30 +phase6-frontend-hooks Implement newThread selectThread deleteThread @frontend
+(A) 2026-06-30 +phase6-frontend-hooks Implement sendMessage appends user msg creates assistant placeholder @frontend
+(A) 2026-06-30 +phase6-frontend-hooks Wire sendMessage to chatStream onToken patches assistant msg @frontend
+(A) 2026-06-30 +phase6-frontend-hooks Implement stopGeneration via AbortController.abort @frontend
+(A) 2026-06-30 +phase6-frontend-hooks Extract citations from final SSE chunk metadata @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement ChatPage page shell with thread sidebar and main area @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement thread sidebar list new chat button clear @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement MessageList user right assistant left alignment @frontend
+(A) 2026-06-30 +phase7-frontend-ui Render assistant message body as markdown @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement CitationsPanel collapsible below each assistant msg @frontend
+(A) 2026-06-30 +phase7-frontend-ui Show source filename and relevance score in CitationsPanel @frontend
+(A) 2026-06-30 +phase7-frontend-ui Show retrieved snippet on expand in CitationsPanel @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement StreamingIndicator pulsing cursor @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement ErrorBanner for SSE error or fetch failure @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement ChatComposer textarea send button stop button @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement ModelPicker dropdown from liteLlmApiRef listModels @frontend
+(A) 2026-06-30 +phase7-frontend-ui Preselect config.chat.defaultModel in ModelPicker @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement VectorStorePicker dropdown from listVectorStores @frontend
+(A) 2026-06-30 +phase7-frontend-ui Add None no grounding option to VectorStorePicker @frontend
+(A) 2026-06-30 +phase7-frontend-ui Preselect config.chat.defaultVectorStoreId in VectorStorePicker @frontend
+(A) 2026-06-30 +phase7-frontend-ui Implement KeyPicker dropdown from liteLlmApiRef listKeys @frontend
+(A) 2026-06-30 +phase7-frontend-ui Show key_alias fallback to masked key_name in KeyPicker @frontend
+(A) 2026-06-30 +phase7-frontend-ui Empty state no keys yet link to /litellm governance page @frontend
+(A) 2026-06-30 +phase7-frontend-ui Register litellmChatPlugin createFrontendPlugin in plugin.tsx @frontend
+(A) 2026-06-30 +phase7-frontend-ui Register ApiBlueprint for liteLlmChatApi @frontend
+(A) 2026-06-30 +phase7-frontend-ui Register PageBlueprint path /ai-chat title AI Chat @frontend
+(A) 2026-06-30 +phase7-frontend-ui Export litellmChatPlugin ChatPage from index.ts @frontend
+(A) 2026-06-30 +phase8-integration Add backend.add import litellmChatPlugin to target Backstage backend @integration
+(A) 2026-06-30 +phase8-integration Add litellmChatPlugin extension to target Backstage App.tsx @integration
+(A) 2026-06-30 +phase8-integration Add route /ai-chat to target Backstage frontend @integration
+(A) 2026-06-30 +phase8-integration Bump backstage image and deploy to backstage namespace GKE @integration
+(A) 2026-06-30 +phase8-integration Verify chat works against live litellm-pgvector service @integration
+(A) 2026-06-30 +phase8-integration Verify streaming SSE renders tokens incrementally @integration
+(A) 2026-06-30 +phase8-integration Verify citations render from search metadata @integration
+(A) 2026-06-30 +phase8-integration Verify key picker enforces per-user budget and model ACLs @integration
+(B) 2026-06-30 +phase8-integration Verify no key empty state redirects to governance page @integration

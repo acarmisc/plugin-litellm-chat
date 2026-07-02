@@ -1,0 +1,64 @@
+{
+  "name": "@acarmisc/backstage-plugin-litellm-chat",
+  "version": "0.3.0",
+  "description": "Backstage frontend plugin for LiteLLM RAG chat — streaming UI with model/KB/key pickers.",
+  "backstage": {
+    "role": "frontend-plugin",
+    "pluginId": "litellm-chat",
+    "pluginPackages": [
+      "@acarmisc/backstage-plugin-litellm-chat"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node build.js && tsc -p tsconfig.json",
+    "prepack": "npm run build",
+    "postpack": ""
+  },
+  "dependencies": {
+    "@acarmisc/backstage-plugin-litellm": "^0.4.0",
+    "@backstage/core-components": "^0.18.10",
+    "@backstage/core-plugin-api": "^1.12.6",
+    "@backstage/frontend-plugin-api": "^0.17.0",
+    "@backstage/types": "^1.2.0",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.18.0",
+    "@mui/material": "^5.16.0",
+    "react": "^18.0.0",
+    "react-markdown": "^9.0.1",
+    "react-use": "^17.2.4",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.36.2",
+    "@types/react": "^18.3.0",
+    "esbuild": "^0.28.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.30.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@types/react": "^18.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.20.0"
+  }
+}
