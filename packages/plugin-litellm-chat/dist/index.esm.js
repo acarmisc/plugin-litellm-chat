@@ -749,7 +749,7 @@ var init_ChatPage = __esm({
           handleSend();
         }
       };
-      return /* @__PURE__ */ React7.createElement(Box4, { sx: { display: "flex", height: "100%", overflow: "hidden" } }, /* @__PURE__ */ React7.createElement(
+      return /* @__PURE__ */ React7.createElement(Box4, { sx: { display: "flex", height: "100dvh", overflow: "hidden" } }, /* @__PURE__ */ React7.createElement(
         Box4,
         {
           sx: {

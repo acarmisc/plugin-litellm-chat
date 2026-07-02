@@ -1,6 +1,6 @@
 {
   "name": "@acarmisc/backstage-plugin-litellm-chat",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Backstage frontend plugin for LiteLLM RAG chat — streaming UI with model/KB/key pickers.",
   "backstage": {
     "role": "frontend-plugin",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@backstage/cli": "^0.36.2",
     "@types/react": "^18.3.0",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.30.0",
     "typescript": "^5.9.3"

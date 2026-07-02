@@ -752,7 +752,7 @@ var init_ChatPage = __esm({
           handleSend();
         }
       };
-      return /* @__PURE__ */ import_react8.default.createElement(import_material7.Box, { sx: { display: "flex", height: "100%", overflow: "hidden" } }, /* @__PURE__ */ import_react8.default.createElement(
+      return /* @__PURE__ */ import_react8.default.createElement(import_material7.Box, { sx: { display: "flex", height: "100dvh", overflow: "hidden" } }, /* @__PURE__ */ import_react8.default.createElement(
         import_material7.Box,
         {
           sx: {
