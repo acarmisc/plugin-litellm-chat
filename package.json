@@ -3,8 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "description": "LiteLLM RAG Chat plugin packages for Backstage. Designed for use within Backstage monorepo.",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "echo 'Use from Backstage monorepo: yarn workspace @acarmisc/backstage-plugin-litellm-chat build'",
+    "build": "yarn workspace @acarmisc/backstage-plugin-litellm-chat build && yarn workspace @acarmisc/backstage-plugin-litellm-chat-backend build",
     "test": "echo 'Use from Backstage monorepo: yarn workspace @acarmisc/backstage-plugin-litellm-chat test'",
     "lint": "echo 'Use from Backstage monorepo: yarn workspace @acarmisc/backstage-plugin-litellm-chat lint'"
   },
