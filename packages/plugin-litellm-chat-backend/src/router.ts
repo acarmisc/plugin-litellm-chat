@@ -217,53 +217,26 @@ export async function createRouter(options: RouterOptions): Promise<Router> {
       toLiteLLMUserId(tokenEntityRef, userIdDomain);
 
       const base = chatConfig.baseUrl;
-      const hasVs = !!body.vector_store_id;
 
-      // PRIMARY: /v1/chat/completions + vector_store_ids — works on
-      // LiteLLM v1.90.0 with DB-backed pgvector stores.
-      // FALLBACK: /v1/rag/query — works only if PG_VECTOR_API_BASE env is
-      // set on the LiteLLM pod; kept as fallback for future LiteLLM
-      // versions or ops-fixed deployments.
-      if (hasVs) {
-        const primaryBody = {
-          model: body.model,
-          messages: body.messages,
-          vector_store_ids: [body.vector_store_id],
-          stream: true,
-        };
-        const fallbackBody = {
-          model: body.model,
-          messages: body.messages,
-          retrieval_config: {
-            vector_store_id: body.vector_store_id,
-            custom_llm_provider: 'pg_vector',
-            top_k: body.top_k ?? 5,
-          },
-          stream: true,
-        };
-        await proxySSE({
-          upstreamUrl: `${base}/v1/chat/completions`,
-          upstreamBody: primaryBody,
-          userKey: body.user_key,
-          res,
-          logger,
-          fallbackUrl: `${base}/v1/rag/query`,
-          fallbackBody,
-        });
-      } else {
-        const chatBody = {
-          model: body.model,
-          messages: body.messages,
-          stream: true,
-        };
-        await proxySSE({
-          upstreamUrl: `${base}/v1/chat/completions`,
-          upstreamBody: chatBody,
-          userKey: body.user_key,
-          res,
-          logger,
-        });
+      // /v1/chat/completions (+ vector_store_ids for RAG) — works on
+      // LiteLLM v1.90.0 with DB-backed pgvector stores. No fallback: the
+      // primary path retrieves and cites KB results, and a fallback here
+      // only masks the real primary error from the client.
+      const chatBody: Record<string, unknown> = {
+        model: body.model,
+        messages: body.messages,
+        stream: true,
+      };
+      if (body.vector_store_id) {
+        chatBody.vector_store_ids = [body.vector_store_id];
       }
+      await proxySSE({
+        upstreamUrl: `${base}/v1/chat/completions`,
+        upstreamBody: chatBody,
+        userKey: body.user_key,
+        res,
+        logger,
+      });
     } catch (err: any) {
       logger.error('chat/stream failed', err);
       if (!res.headersSent) {

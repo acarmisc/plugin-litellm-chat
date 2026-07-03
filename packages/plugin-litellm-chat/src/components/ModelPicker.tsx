@@ -23,8 +23,14 @@ export const ModelPicker: React.FC<ModelPickerProps> = ({
     let alive = true;
     liteLlmApi
       .listModels()
-      .then(m => {
+      .then(all => {
         if (!alive) return;
+        // Filter out Anthropic/claude-* models: they require a per-user
+        // Anthropic Max OAuth token that Claude Code injects client-side.
+        // Backstage only forwards a LiteLLM virtual key, so the gateway has
+        // no Anthropic credential and every claude-* call 401s. Hide them
+        // rather than offer a model that always fails.
+        const m = all.filter(x => !x.model_name.startsWith('claude'));
         setModels(m);
         if (!value && m.length) {
           const def =
