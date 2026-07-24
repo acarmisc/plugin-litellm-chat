@@ -371,8 +371,9 @@ var init_ModelPicker = __esm({
       const [loading, setLoading] = (0, import_react2.useState)(true);
       (0, import_react2.useEffect)(() => {
         let alive = true;
-        liteLlmApi.listModels().then((m) => {
+        liteLlmApi.listModels().then((all) => {
           if (!alive) return;
+          const m = all.filter((x) => !x.model_name.startsWith("claude"));
           setModels(m);
           if (!value && m.length) {
             const def = defaultModel && m.find((x) => x.model_name === defaultModel)?.model_name || m[0].model_name;

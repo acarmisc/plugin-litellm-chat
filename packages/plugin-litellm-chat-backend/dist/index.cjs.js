@@ -47,7 +47,7 @@ var import_backstage_plugin_litellm_backend = require("@acarmisc/backstage-plugi
 // src/stream.ts
 var import_stream = require("stream");
 async function proxySSE(opts) {
-  const { upstreamUrl, upstreamBody, userKey, res, logger, fallbackUrl, fallbackBody } = opts;
+  const { upstreamUrl, upstreamBody, userKey, res, logger } = opts;
   const controller = new AbortController();
   res.on("close", () => controller.abort());
   const headers = {
@@ -76,19 +76,7 @@ async function proxySSE(opts) {
     return import_stream.Readable.fromWeb(upstream.body);
   };
   try {
-    let stream;
-    try {
-      stream = await fetchUpstream(upstreamUrl, upstreamBody);
-    } catch (err) {
-      if (fallbackUrl && fallbackBody) {
-        logger.info(
-          `Primary upstream failed (${err.status ?? err.message}) \u2014 trying fallback`
-        );
-        stream = await fetchUpstream(fallbackUrl, fallbackBody);
-      } else {
-        throw err;
-      }
-    }
+    const stream = await fetchUpstream(upstreamUrl, upstreamBody);
     res.writeHead(200, headers);
     res.flushHeaders();
     stream.on("data", (chunk) => {
@@ -284,47 +272,21 @@ async function createRouter(options) {
       }
       (0, import_backstage_plugin_litellm_backend.toLiteLLMUserId)(tokenEntityRef, userIdDomain);
       const base = chatConfig.baseUrl;
-      const hasVs = !!body.vector_store_id;
-      if (hasVs) {
-        const primaryBody = {
-          model: body.model,
-          messages: body.messages,
-          vector_store_ids: [body.vector_store_id],
-          stream: true
-        };
-        const fallbackBody = {
-          model: body.model,
-          messages: body.messages,
-          retrieval_config: {
-            vector_store_id: body.vector_store_id,
-            custom_llm_provider: "pg_vector",
-            top_k: body.top_k ?? 5
-          },
-          stream: true
-        };
-        await proxySSE({
-          upstreamUrl: `${base}/v1/chat/completions`,
-          upstreamBody: primaryBody,
-          userKey: body.user_key,
-          res,
-          logger,
-          fallbackUrl: `${base}/v1/rag/query`,
-          fallbackBody
-        });
-      } else {
-        const chatBody = {
-          model: body.model,
-          messages: body.messages,
-          stream: true
-        };
-        await proxySSE({
-          upstreamUrl: `${base}/v1/chat/completions`,
-          upstreamBody: chatBody,
-          userKey: body.user_key,
-          res,
-          logger
-        });
+      const chatBody = {
+        model: body.model,
+        messages: body.messages,
+        stream: true
+      };
+      if (body.vector_store_id) {
+        chatBody.vector_store_ids = [body.vector_store_id];
       }
+      await proxySSE({
+        upstreamUrl: `${base}/v1/chat/completions`,
+        upstreamBody: chatBody,
+        userKey: body.user_key,
+        res,
+        logger
+      });
     } catch (err) {
       logger.error("chat/stream failed", err);
       if (!res.headersSent) {

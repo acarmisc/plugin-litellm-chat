@@ -5,7 +5,5 @@ export interface ProxySSEOptions {
     userKey: string;
     res: Response;
     logger: any;
-    fallbackUrl?: string;
-    fallbackBody?: unknown;
 }
 export declare function proxySSE(opts: ProxySSEOptions): Promise<void>;

@@ -1,6 +1,0 @@
-{
-  "name": "@internal/frontend-pkg",
-  "backstage": {
-    "role": "frontend"
-  }
-}

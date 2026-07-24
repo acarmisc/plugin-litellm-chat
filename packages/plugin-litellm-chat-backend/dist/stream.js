@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.proxySSE = proxySSE;
 const stream_1 = require("stream");
 async function proxySSE(opts) {
-    const { upstreamUrl, upstreamBody, userKey, res, logger, fallbackUrl, fallbackBody } = opts;
+    const { upstreamUrl, upstreamBody, userKey, res, logger } = opts;
     const controller = new AbortController();
     res.on('close', () => controller.abort());
     const headers = {
@@ -33,23 +33,7 @@ async function proxySSE(opts) {
         return stream_1.Readable.fromWeb(upstream.body);
     };
     try {
-        let stream;
-        try {
-            stream = await fetchUpstream(upstreamUrl, upstreamBody);
-        }
-        catch (err) {
-            // Fallback on any upstream error (non-200 or network). The primary
-            // path is /v1/chat/completions + vector_store_ids; if that rejects
-            // (e.g. vector_store_ids unsupported in some LiteLLM build), try
-            // /v1/rag/query as fallback.
-            if (fallbackUrl && fallbackBody) {
-                logger.info(`Primary upstream failed (${err.status ?? err.message}) — trying fallback`);
-                stream = await fetchUpstream(fallbackUrl, fallbackBody);
-            }
-            else {
-                throw err;
-            }
-        }
+        const stream = await fetchUpstream(upstreamUrl, upstreamBody);
         res.writeHead(200, headers);
         res.flushHeaders();
         stream.on('data', (chunk) => {
